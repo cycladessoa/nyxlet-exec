@@ -49,7 +49,7 @@ import org.cyclades.engine.stroma.STROMAResponseWriter;
  * This pattern follows for all HTTP methods (i.e. PUT, DELETE etc...) 
  *
  */
-@AHandler({"sayhello", "GET"})
+@AHandler({"sayhello"})
 public class HelloWorldActionHandler extends ActionHandler {
 
     public HelloWorldActionHandler (STROMANyxlet parentNyxlet) {
