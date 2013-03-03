@@ -1,0 +1,165 @@
+////////////////////////////////////////////////////////////////////////////////
+Copyright (c) 2012, THE BOARD OF TRUSTEES OF THE LELAND STANFORD JUNIOR UNIVERSITY
+All rights reserved.
+
+Redistribution and use in source and binary forms, with or without modification,
+are permitted provided that the following conditions are met:
+
+   Redistributions of source code must retain the above copyright notice,
+   this list of conditions and the following disclaimer.
+   Redistributions in binary form must reproduce the above copyright notice,
+   this list of conditions and the following disclaimer in the documentation
+   and/or other materials provided with the distribution.
+   Neither the name of the STANFORD UNIVERSITY nor the names of its contributors
+   may be used to endorse or promote products derived from this software without
+   specific prior written permission.
+
+THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED.
+IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,
+INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
+BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,
+DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE
+OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED
+OF THE POSSIBILITY OF SUCH DAMAGE.
+////////////////////////////////////////////////////////////////////////////////
+
+= Service Capability Contract: exec
+:toc:
+
+== Document Version
+1.0
+
+== Intent
+The intent of this document is to provide a contract for consumer reference on use of this capability
+
+== Name
+exec
+
+== Aliases
+GET
+
+== Description
+This is a trivial implementation of a capability that enables client to execute commands on the host...i.e. shell, bash etc.
+
+== State Management
+This service capability is stateless
+
+== Owner
+TBD
+
+== Interface
+
+=== Interface Classification
+* synchronous/asynchronous
+* STROMA compliant (Transport Protocol Agnostic)
+* HTTP adapter provided by container
+* Asynchronous targets via servicebroker available
+
+=== Expected Input
+
+.Special URI rules
+
+* N/A
+
+.Parameters
+
+* *command* [required] The command to execute
+* *working-directory* [required] The directory on the remote host from which to execute the command
+* *valid-exit-code* [optional] The valid exit code of the commmand (integer, defaults to 0)
+* *output* [optional (true|false)] If true, the stdErr and stdOut will be accumulated and returned
+* *command-in-response* [optional (true|false)] If true, the original command will be echoed back as a response parameter
+* *host* [optional (true|false)] If true, the name of the host on which this capability was serviced will be returned as a response parameter
+
+.Meta Data
+
+N/A
+
+[NOTE]
+The following are trivial examples to use as a reference. Please see STROMA/X-STROMA specification for details.
+
+==== XML request variations
+http://localhost:8080/cyclades/exec?data-type=xml&working-directory=/&command=ls&output&duration&valid-exit-code=0&service-agent&command-in-response
+
+==== JSON request variations
+http://localhost:8080/cyclades/exec?data-type=json&working-directory=/&command=ls&output&duration&valid-exit-code=0&service-agent&command-in-response
+
+=== Expected Output
+
+==== XML
+
+----
+<response service="exec" service-agent="exec/1.0 STROMA/1.0" action="GET" error-code="0">
+  <parameters>
+    <parameter name="command" value="ls" /> 
+    <parameter name="exit-code" value="0" /> 
+    <parameter name="std-out" value="bin boot cdrom conf dbbackup dev etc hello home initrd initrd.img initrd.img.old iscsi lib lib64 lost+found media medical mnt new_dd_docs old_dd_docs opt output proc root sbin sms.log srv sys tmp usr var vmlinuz vmlinuz.old werf_werw.h2.db" /> 
+    <parameter name="std-err" value="" /> 
+  </parameters>
+  <duration val="18" /> 
+</response>
+----
+
+==== JSON
+
+----
+{
+    "error-code": "0",
+    "service": "exec",
+    "service-agent": "exec/1.0 STROMA/1.0",
+    "action": "GET",
+    "data": {},
+    "parameters": [
+        {
+            "name": "command",
+            "value": "ls"
+        },
+        {
+            "name": "exit-code",
+            "value": "0"
+        },
+        {
+            "name": "std-out",
+            "value": "bin\nboot\ncdrom\nconf\ndbbackup\ndev\netc\nhello\nhome\ninitrd\ninitrd.img\ninitrd.img.old\niscsi\nlib\nlib64\nlost+found\nmedia\nmedical\nmnt\nnew_dd_docs\nold_dd_docs\nopt\noutput\nproc\nroot\nsbin\nsms.log\nsrv\nsys\ntmp\nusr\nvar\nvmlinuz\nvmlinuz.old\nwerf_werw.h2.db\n"
+        },
+        {
+            "name": "std-err",
+            "value": ""
+        }
+    ],
+    "duration": "19"
+}
+----
+
+== Additional Orchestration Capability Details
+
+None
+
+== Functional Requirements
+
+* The capability will execute a given command on the command line of the host it resides on
+
+== Non Functional Requirements
+
+* SLA/QoS
+ - N/A
+
+* Security
+ - N/A
+
+== Test Results
+
+* link:load_test_results.html[Load Test Results]
+* link:extended_duration_test_results.html[Extended Duration Test Results]
+* link:functional_test_results.html[Functional Test Results]
+
+
+== Modifications To This Document
+
+[options="header"]
+|=========================================================
+|Author			|Date		|Version	|Details
+|<name>			|<date>		|1.0		|Document Creation
+|=========================================================
