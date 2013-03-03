@@ -42,7 +42,7 @@ apply from: 'cyclades_java_client_servicebroker_targets.gradle'
 
 version = nyxlet_exec_version + '.' + build_number
 ext.isReleaseVersion = !version.endsWith("SNAPSHOT")
-group = 'org.cyclades.nyxlet'
+group = 'com.github.cycladessoa.nyxlets'
 archivesBaseName = 'exec'
 
 List<String> listKey = new ArrayList<String>()
@@ -56,9 +56,9 @@ uploadArchives {
                 authentication(userName: sonatypeUsername, password: sonatypePassword)
             }
             pom.project {
-               name 'Cyclades Nyxlet for Log'
+               name 'Cyclades Nyxlet for Exec'
                packaging 'jar'
-               description 'Log Nyxlet used within Cyclades'
+               description 'Exec Nyxlet used within Cyclades'
                url 'http://github.com/cycladessoa'
                scm {
                    url 'scm:git@github.com:cycladessoa/cyclades.git'
