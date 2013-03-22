@@ -40,6 +40,7 @@ import org.cyclades.engine.validator.IfThen;
 import org.cyclades.engine.validator.ParameterExists;
 import org.cyclades.engine.validator.ParameterHasIntegerValue;
 import org.cyclades.engine.validator.ParameterHasValue;
+import org.cyclades.engine.validator.ParameterMatches;
 import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
@@ -122,6 +123,10 @@ public class DefaultExecActionHandler extends ActionHandler {
         .add(new ParameterHasValue(PARAMETER_COMMAND))
         .add(new ParameterHasValue(PARAMETER_WORKING_DIRECTORY))
         .add(new IfThen(new ParameterExists(PARAMETER_VALID_EXIT_CODE), new ParameterHasIntegerValue(PARAMETER_VALID_EXIT_CODE)));
+        if (getParentNyxlet().getExternalProperties().containsKey(PASSWORD)) {
+            getFieldValidators().add(new ParameterMatches(
+                    PASSWORD, getParentNyxlet().getExternalProperties().getProperty(PASSWORD)).showValues(false));
+        }
         hostName = java.net.InetAddress.getLocalHost().getHostName();
     }
 
@@ -137,5 +142,6 @@ public class DefaultExecActionHandler extends ActionHandler {
     private static final String PARAMETER_WORKING_DIRECTORY     = "working-directory";
     private static final String PARAMETER_COMMAND_IN_RESPONSE   = "command-in-response";
     private static final String PARAMETER_HOST                  = "host";
+    private static final String PASSWORD                        = "password";
 
 }
